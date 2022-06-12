@@ -14,9 +14,6 @@
 
 using namespace std;
 
-//exec as such: mpiexec -np <num_of_procs> program <value_of_r>
-//like this; mpiexec -np 2 program 2
-//This will create an array of 4x8 (m=2*2, n=2m)
 int main(int argc, char **argv){
 int rank, size, m, n, i, j, k, l;
 
@@ -56,15 +53,15 @@ if(!rank) cout <<endl;
 int local_max;
 int temp_max=0;
 for (k=0; k<size; k++, l=0){
-if (k==rank){
-for(int c=0; c<r; c++){
-for(l=0; l<n; l++)
-if (array[r*k+c] [0]<array[r*k+c][l]) array[r*k+c] [0]=array[r*k+c] [l];
-cout << "Process " << k<< " Max is " << array[r*k+c][0] <<endl;
-if (local_max<array[r*k+c][0] )
-local_max=array[r*k+c][0];
-}
-}
+  if (k==rank){
+    for(int c=0; c<r; c++){
+      for(l=0; l<n; l++)
+        if (array[r*k+c] [0]<array[r*k+c][l]) array[r*k+c] [0]=array[r*k+c] [l];
+          cout << "Process " << k<< " Max is " << array[r*k+c][0] <<endl;
+        if (local_max<array[r*k+c][0] )
+          local_max=array[r*k+c][0];
+      }
+    }
 }
 int full_max=0;
 MPI_Reduce(&local_max, &full_max, 1, MPI_INT, MPI_MAX, 0, MPI_COMM_WORLD) ;
